@@ -19,20 +19,20 @@ public class ContainerEncoder extends ContainerTileBase<TileEncoder> {
 	public void setupSlots() {
 		inventorySlots.clear();
 		patternInventory = tile.patternInventories[tile.patternIndex];
-		addSlotToContainer(new SlotBase(inventory, 0, 8, 26));
+		addSlotToContainer(new SlotBase(inventory, 0, 8, 35));
 		for(int i = 0; i < 9; ++i) {
 			for(int j = 0; j < 9; ++j) {
 				addSlot(patternInventory, i*9+j, 8+j*18, 57+i*18);
 			}
 		}
-		for(int i = 0; i < 3; ++i) {
+		for(int i = 0; i < 6; ++i) {
 			for(int j = 0; j < 3; ++j) {
-				addSlot(patternInventory, 81+i*3+j, 198+j*18, 111+i*18);
+				addSlot(patternInventory, 81+i*3+j, 198+j*18, 57+i*18);
 			}
 		}
 		for(int i = 0; i < 3; ++i) {
 			for(int j = 0; j < 3; ++j) {
-				addSlot(patternInventory, 90+i*3+j, 198+j*18, 165+i*18);
+				addSlot(patternInventory, 99+i*3+j, 198+j*18, 165+i*18);
 			}
 		}
 		setupPlayerInventory();
