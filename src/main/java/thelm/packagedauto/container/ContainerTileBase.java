@@ -27,7 +27,7 @@ public class ContainerTileBase<TILE extends TileBase> extends Container {
 	public ContainerTileBase(InventoryPlayer playerInventory, TILE tile) {
 		this.tile = tile;
 		this.playerInventory = playerInventory;
-		this.inventory = tile.getInventory();
+		this.inventory = tile != null ? tile.getInventory() : new InventoryTileBase(null, 0);
 	}
 
 	public int getPlayerInvY() {
