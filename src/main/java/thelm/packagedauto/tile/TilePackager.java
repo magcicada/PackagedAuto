@@ -2,6 +2,7 @@ package thelm.packagedauto.tile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
@@ -57,14 +58,13 @@ public class TilePackager extends TileBase implements ITickable, IGridHost, IAct
 	public static int energyReq = 500;
 	public static int energyUsage = 100;
 	public static boolean drawMEEnergy = true;
-	public static boolean checkDisjoint = true;
-	public static boolean forceDisjoint = false;
 
 	public boolean isWorking = false;
 	public int remainingProgress = 0;
 	public List<IPackagePattern> patternList = new ArrayList<>();
 	public IPackagePattern currentPattern;
 	public boolean lockPattern = false;
+	public Mode mode = Mode.EXACT;
 	public boolean disjoint = false;
 	public boolean powered = false;
 
@@ -446,6 +446,7 @@ public class TilePackager extends TileBase implements ITickable, IGridHost, IAct
 		isWorking = nbt.getBoolean("Working");
 		remainingProgress = nbt.getInteger("Progress");
 		powered = nbt.getBoolean("Powered");
+		mode = Mode.values()[nbt.getByte("Mode")];
 	}
 
 	@Override
@@ -454,7 +455,13 @@ public class TilePackager extends TileBase implements ITickable, IGridHost, IAct
 		nbt.setBoolean("Working", isWorking);
 		nbt.setInteger("Progress", remainingProgress);
 		nbt.setBoolean("Powered", powered);
+		nbt.setByte("Mode", (byte)mode.ordinal());
 		return nbt;
+	}
+
+	public void changePackagingMode() {
+		mode = Mode.values()[((mode.ordinal()+1) % 3)];
+		markDirty();
 	}
 
 	@Override
@@ -488,5 +495,13 @@ public class TilePackager extends TileBase implements ITickable, IGridHost, IAct
 	@Override
 	public Container getServerGuiElement(EntityPlayer player, Object... args) {
 		return new ContainerPackager(player.inventory, this);
+	}
+
+	public static enum Mode {
+		EXACT, DISJOINT, FIRST;
+
+		public String getTooltip() {
+			return I18n.translateToLocal("tile.packagedauto.packager.mode."+name().toLowerCase(Locale.US));
+		}
 	}
 }
